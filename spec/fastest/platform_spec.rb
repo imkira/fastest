@@ -56,5 +56,17 @@ module Fastest
         should be_kind_of Windows
       end
     end
+
+    describe "#default_browser" do
+      it "returns a known browser" do
+        subject.default_browser.should match /iexplore|firefox|chrome|safari|konqueror|opera/i
+      end
+    end
+
+    describe "#default_graphical_text_editor" do
+      it "returns a known text editor" do
+        subject.default_graphical_text_editor.should match /notepad|vim|gedit|textedit/i
+      end
+    end
   end
 end
