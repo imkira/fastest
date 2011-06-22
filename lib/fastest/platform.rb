@@ -1,24 +1,18 @@
 module Fastest
-  module Platform
-    # @return [Unix, Mac, Windows]
-    # Singleton instance of the current platform
-    def self.instance
-      Platform.family.instance
-    end
-
-    # @return [Class]
-    # The concrete platform class of the current platform.
-    def self.family
-      @family ||=
+  module GenericPlatform
+    # @return [Module]
+    # The concrete platform namespace for the current platform.
+    def self.namespace
+      @description =
         begin
           description = RUBY_PLATFORM
           case description.downcase
           when /darwin/
-            Mac
+            Fastest::Mac
           when /linux|freebsd|openbsd|netbsd/
-            Unix
+            Fastest::Unix
           when /mswin/
-            Windows
+            Fastest::Windows
           else
             raise UnknownPlatformError, "Unknown platform: #{description}"
           end
@@ -41,3 +35,4 @@ module Fastest
     end
   end
 end
+

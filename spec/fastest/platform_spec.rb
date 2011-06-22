@@ -1,39 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module Fastest
-  describe Platform do
+  describe 'Platform' do
     subject do
-      Platform.instance
-    end
-
-    describe ".instance" do
-      it "should return the same object for multiple calls" do
-        plat2 = Platform.instance
-        plat3 = Platform.instance
-        plat2.should === subject
-        plat3.should === subject
-      end
-
-      it "should be exactly one of the supported platforms" do
-        count = 0
-        count += 1 if subject.unix?
-        count += 1 if subject.mac?
-        count.should be < 2
-        count += 1 if subject.windows?
-        count.should be == 1
-      end
-    end
-
-    describe ".family" do
-      it "should return the class for the current platform"do
-        family = Platform.family
-        count = 0
-        count += 1 if family == Unix
-        count += 1 if family == Mac
-        count.should be < 2
-        count += 1 if family == Windows
-        count.should be == 1
-      end
+      Platform
     end
 
     describe "#unix?" do
