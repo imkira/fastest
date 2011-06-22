@@ -24,6 +24,18 @@ module Fastest
       end
     end
 
+    describe ".os" do
+      it "should return the class for the current platform"do
+        os = Platform.os
+        count = 0
+        count += 1 if os == Linux
+        count += 1 if os == Mac
+        count.should be < 2
+        count += 1 if os == Windows
+        count.should be == 1
+      end
+    end
+
     describe "#linux?" do
       it "should return true on a Linux OS" do
         next unless subject.kind_of? Linux
