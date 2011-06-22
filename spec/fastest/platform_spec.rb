@@ -43,7 +43,7 @@ module Fastest
       end
     end
 
-    describe "#lmac?" do
+    describe "#mac?" do
       it "should return true on a Mac OS" do
         next unless subject.kind_of? Mac
         should be_kind_of Mac 
