@@ -1,4 +1,5 @@
 require 'singleton'
+require 'fastest/unix/process'
 
 module Fastest
   module Unix

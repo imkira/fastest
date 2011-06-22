@@ -15,7 +15,10 @@ require 'fastest/mac/platform'
 require 'fastest/windows/platform'
 
 module Fastest
-  if not defined?(Platform)
-    Platform = GenericPlatform.namespace::Platform.instance
+  unless defined?(Fastest::Platform)
+    Fastest::Platform = GenericPlatform.namespace::Platform.instance
+  end
+  unless defined?(Fastest::Process)
+    Fastest::Process = GenericPlatform.namespace::Process
   end
 end
