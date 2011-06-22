@@ -1,6 +1,5 @@
 module Fastest
   module Platform
-
     # @return [Linux, Mac, Windows]
     # Singleton instance of the current platform
     def self.instance
