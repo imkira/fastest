@@ -63,9 +63,9 @@ module Fastest
       end
     end
 
-    describe "#default_graphical_text_editor" do
+    describe "#default_text_editor" do
       it "returns a known text editor" do
-        subject.default_graphical_text_editor.should match /notepad|vim|gedit|textedit/i
+        subject.default_text_editor.should match /notepad|vim|gedit|textedit/i
       end
     end
   end
