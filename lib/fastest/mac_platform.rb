@@ -5,9 +5,6 @@ module Fastest
     include Platform
     include Singleton
 
-    def initialize
-    end
-
     # @return [String] path to default browser application
     def default_browser
       raise 'not implemented'

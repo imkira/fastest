@@ -5,9 +5,6 @@ module Fastest
     include Platform
     include Singleton
 
-    def initialize
-    end
-
     # @return [String] path to default browser application
     def default_browser
       `update-alternatives --list x-www-browser`.lines.first.chomp
