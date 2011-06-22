@@ -6,8 +6,9 @@ module Fastest
 end
 
 $:<<(File.dirname(__FILE__))
-require 'fastest/platform.rb'
-require 'fastest/linux_platform.rb'
-require 'fastest/mac_platform.rb'
-require 'fastest/windows_platform.rb'
+require 'fastest/exceptions'
+require 'fastest/platform'
+require 'fastest/linux_platform'
+require 'fastest/mac_platform'
+require 'fastest/windows_platform'
 
