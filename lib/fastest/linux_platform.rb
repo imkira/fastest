@@ -14,7 +14,7 @@ module Fastest
     end
 
     # @return [String] path to default (graphical) text editor
-    def default_graphical_text_editor
+    def default_text_editor
       `update-alternatives --list gnome-text-editor`.lines.first.chomp
     end
   end
