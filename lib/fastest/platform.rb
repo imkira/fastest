@@ -9,17 +9,20 @@ module Fastest
     # @return [Class]
     # The concrete platform class of the current platform.
     def self.os
-      description = RUBY_PLATFORM
-      case description.downcase
-      when /linux/
-        Linux
-      when /darwin/
-        Mac
-      when /mswin/
-        Windows
-      else
-      raise UnknownPlatformError, "Unknown platform: #{description}"
-      end
+      @os ||=
+        begin
+          description = RUBY_PLATFORM
+          case description.downcase
+          when /linux/
+            Linux
+          when /darwin/
+            Mac
+          when /mswin/
+            Windows
+          else
+            raise UnknownPlatformError, "Unknown platform: #{description}"
+          end
+        end
     end
 
     # @return [true, false] true on Linux, false otherwise
