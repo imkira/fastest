@@ -1,5 +1,5 @@
 module Fastest
-  class Linux < Platform
+  class Windows < Platform
     def initialize
     end
   end
