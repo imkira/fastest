@@ -8,7 +8,8 @@ end
 $:<<(File.dirname(__FILE__))
 require 'fastest/exceptions'
 require 'fastest/platform'
-require 'fastest/linux_platform'
-require 'fastest/mac_platform'
-require 'fastest/windows_platform'
-
+require 'fastest/process'
+require 'fastest/window'
+require 'fastest/unix/platform'
+require 'fastest/mac/platform'
+require 'fastest/windows/platform'

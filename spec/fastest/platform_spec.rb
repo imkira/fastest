@@ -16,7 +16,7 @@ module Fastest
 
       it "should be exactly one of the supported platforms" do
         count = 0
-        count += 1 if subject.linux?
+        count += 1 if subject.unix?
         count += 1 if subject.mac?
         count.should be < 2
         count += 1 if subject.windows?
@@ -24,22 +24,22 @@ module Fastest
       end
     end
 
-    describe ".os" do
+    describe ".family" do
       it "should return the class for the current platform"do
-        os = Platform.os
+        family = Platform.family
         count = 0
-        count += 1 if os == Linux
-        count += 1 if os == Mac
+        count += 1 if family == Unix
+        count += 1 if family == Mac
         count.should be < 2
-        count += 1 if os == Windows
+        count += 1 if family == Windows
         count.should be == 1
       end
     end
 
-    describe "#linux?" do
-      it "should return true on a Linux OS" do
-        next unless subject.kind_of? Linux
-        should be_kind_of Linux
+    describe "#unix?" do
+      it "should return true on a Unix-like OS" do
+        next unless subject.kind_of? Unix
+        should be_kind_of Unix
       end
     end
 
