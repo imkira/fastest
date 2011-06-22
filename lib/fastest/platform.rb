@@ -1,14 +1,10 @@
-require 'singleton'
-
 module Fastest
-  class Platform
-    include Singleton
-
-    def initialize
-      Platform.type.instance
+  module Platform
+    def self.instance
+      Platform.os.instance
     end
 
-    def self.type
+    def self.os
       description = RUBY_PLATFORM
       case description.downcase
       when /linux/

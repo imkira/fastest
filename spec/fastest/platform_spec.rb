@@ -14,8 +14,13 @@ module Fastest
         plat3.should === subject
       end
 
-      it "should build a concrete platform" do
-        should be_kind_of Platform
+      it "should be exactly one of the supported platforms" do
+        count = 0
+        count += 1 if subject.linux?
+        count += 1 if subject.mac?
+        count.should be < 2
+        count += 1 if subject.windows?
+        count.should be == 1
       end
     end
 
@@ -39,6 +44,5 @@ module Fastest
         should be_kind_of Windows
       end
     end
-
   end
 end
