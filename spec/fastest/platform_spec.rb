@@ -6,24 +6,53 @@ module Fastest
       Platform
     end
 
+    describe "#bsd?" do
+      it "should return true on BSD flavors or false otherwise" do
+        if RUBY_PLATFORM =~ /freebsd|openbsd|netbsd/i
+          should be_bsd
+        else
+          should_not be_bsd
+        end
+      end
+    end
+
     describe "#unix?" do
-      it "should return true on a Unix-like OS" do
-        next unless subject.kind_of? Unix
-        should be_kind_of Unix
+      it "should return true on Linux and BSD flavors or false otherwise" do
+        if RUBY_PLATFORM =~ /linux|freebsd|openbsd|netbsd/i
+          should be_unix
+        else
+          should_not be_unix
+        end
+      end
+    end
+
+    describe "#linux?" do
+      it "should return true on Linux or false otherwise" do
+        if RUBY_PLATFORM =~ /linux/i
+          should be_linux
+        else
+          should_not be_linux
+        end
       end
     end
 
     describe "#mac?" do
-      it "should return true on a Mac OS" do
-        next unless subject.kind_of? Mac
-        should be_kind_of Mac 
+      it "should return true on MacOS or false otherwise" do
+        if RUBY_PLATFORM =~ /darwin/i
+          should be_mac
+        else
+          should_not be_mac
+        end
       end
     end
 
     describe "#windows?" do
-      it "should return true on a Windows OS" do
-        next unless subject.kind_of? Windows
-        should be_kind_of Windows
+      it "should return true on Windows or false otherwise" do
+        if RUBY_PLATFORM =~ /mswin/i
+          should be_windows
+        else
+          should_not be_windows
+        end
       end
     end
 

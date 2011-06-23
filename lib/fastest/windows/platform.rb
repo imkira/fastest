@@ -1,11 +1,6 @@
-require 'singleton'
-
 module Fastest
   module Windows
-    class Platform
-      include GenericPlatform
-      include Singleton
-
+    class Platform < GenericPlatform
       # @return [String] path to default browser application
       def default_browser
         raise 'not implemented'
