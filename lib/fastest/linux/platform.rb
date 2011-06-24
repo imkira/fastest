@@ -2,7 +2,9 @@ require 'fastest/unix/platform'
 require 'fastest/linux/process'
 
 module Fastest
+  # This module acts as a namespace for all Linux platform definitions
   module Linux
+    # Platform class for Linux systems
     class Platform < Fastest::Unix::Platform
       # @return [String] path to default browser application
       def default_browser

@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.require(:default)
 
+# Top level namespace for all library's definitions
 module Fastest
 end
 
