@@ -5,7 +5,7 @@ module Fastest
   module BSD
     # Platform class for BSD-like systems
     # @abstract
-    class Platform < Fastest::BSD::Platform
+    class Platform < Fastest::Unix::Platform
     end
   end
 end
