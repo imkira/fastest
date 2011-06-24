@@ -34,6 +34,12 @@ module Fastest
       all[::Process.pid]
     end
 
+    # Iterate over all currently running processes
+    # @return [Enumerator] each enumerator for all Process objects
+    def self.each (&block)
+      all.each_value(&block)
+    end
+
     # Compares receiver process against another
     # @param [GenericProcess] target process to compare against
     # @return [-1, 0, 1] implementation of Comparable's <=>

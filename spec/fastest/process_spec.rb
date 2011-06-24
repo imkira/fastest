@@ -13,8 +13,7 @@ module Fastest
 
       it 'should contain the full path to ruby' do
         ruby_path = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
-        ruby_path = File.expand_path(ruby_path)
-        subject.path.should == ruby_path
+        subject.path.should == File.expand_path(ruby_path)
       end
     end
 
@@ -30,7 +29,7 @@ module Fastest
         end
       end
 
-      it 'should be a non-empty' do
+      it 'should be non-empty' do
         should_not be_empty
       end
 
@@ -43,6 +42,28 @@ module Fastest
       it 'should contain the current process' do
         subject[::Process.pid].should_not be_nil
         subject[::Process.pid].should == Process.current
+      end
+    end
+
+    describe '.each' do
+      it 'should be an enumerator' do
+        Process.each.should be_kind_of Enumerator
+      end
+
+      it 'should be non-empty' do
+        Process.each.should be_any
+      end
+
+      it 'should contain processes' do
+        Process.each do |process|
+          process.should be_kind_of Process
+        end
+      end
+
+      it 'should contain the current process' do
+        Process.each.any? do |process|
+          process.pid == ::Process.pid
+        end.should == true
       end
     end
   end
