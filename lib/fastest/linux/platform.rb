@@ -16,7 +16,7 @@ module Fastest
         `update-alternatives --list gnome-text-editor`.lines.first.chomp
       end
 
-      # Returns the HZ
+      # Returns the system clock's number of ticks (jiffies) per second
       # @return [Fixnum] clock tick for the current kernel
       def system_clock_tick
         @@system_clock_tick ||= LibC::sysconf(LibC::SC_CLK_TCK)

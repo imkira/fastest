@@ -8,7 +8,7 @@ module Fastest
         sys_process_to_process Sys::ProcTable.ps(::Process.pid)
       end
 
-      # Retrieve all currently executing processes
+      # Return all currently executing processes
       # @return [Hash] hash of currently running processes indexed by their PID
       def self.all
         Sys::ProcTable.ps.inject({}) do |procs, process|
@@ -19,6 +19,9 @@ module Fastest
 
       private
 
+      # Convert a Struct::ProcTableStruct entry into a Fastest::Process
+      # @param [Struct::ProcTableStruct] process structure returned by Sys::ProcTable.ps
+      # @return [Process] corresponding Fastest::Process
       def self.sys_process_to_process (process)
         # starttime as reported by /proc is the number of jiffies since last boot
         created_at = Fastest::Platform.system_boot_time
