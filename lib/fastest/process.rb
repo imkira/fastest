@@ -14,16 +14,20 @@ module Fastest
     # @return [Fixnum] the parent process id
     attr_reader :ppid
 
+    # @return [String] the process name
+    attr_reader :name
+
     # @return [String] the full process path
     attr_reader :path
 
     # @return [String] the command line passed to the process
     attr_reader :cmd_line
 
-    def initialize (pid, created_at, ppid = nil, path = nil, cmd_line = nil)
+    def initialize (pid, created_at, ppid = nil, name = nil, path = nil, cmd_line = nil)
       @pid = pid
       @created_at = created_at
       @ppid = ppid
+      @name = name
       @path = path
       @cmd_line = cmd_line
     end

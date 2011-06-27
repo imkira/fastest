@@ -8,8 +8,8 @@ module Fastest
       end
 
       it 'should only sort by PID and creation time' do
-        process1 = Process.new(10, @now, 1, '/bin/ls', '/dir')
-        process2 = Process.new(10, @now, 2, '/bin/cat', '/file')
+        process1 = Process.new(10, @now, 1, 'ls', '/bin/ls', '/dir')
+        process2 = Process.new(10, @now, 2, 'cat', '/bin/cat', '/file')
         process1.should == process2
         process2.should == process1
       end
@@ -59,7 +59,12 @@ module Fastest
         subject.ppid.should == ::Process.ppid
       end
 
-      it 'should contain the full path to ruby' do
+      it 'should have the name set to ruby' do
+        ruby_name = Config::CONFIG['ruby_install_name']
+        subject.name.should == ruby_name
+      end
+
+      it 'should have the full path set to ruby' do
         ruby_path = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
         subject.path.should == File.expand_path(ruby_path)
       end

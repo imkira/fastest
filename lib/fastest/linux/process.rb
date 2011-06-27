@@ -12,7 +12,7 @@ module Fastest
         # starttime as reported by /proc is the number of jiffies since last boot
         created_at = Fastest::Platform.system_boot_time
         created_at += process.starttime / Fastest::Platform.system_clock_tick.to_f
-        Process.new(process.pid, created_at, process.ppid, process.exe, process.cmdline)
+        Process.new(process.pid, created_at, process.ppid, process.name, process.exe, process.cmdline)
       end
     end
   end
