@@ -40,23 +40,47 @@ module Fastest
       end
     end
 
+    # Returns the current working directory for the process
+    # @return [String] the current working directory
+    def working_dir
+      update.cwd
+    end
+
+    alias :cwd :working_dir
+
+    # Return all currently executing processes
+    # @return [Array] array of currently running processes
+    def self.all
+      Sys::ProcTable.ps.map do |process|
+        sys_process_to_process(process)
+      end
+    end
+
     # Iterate over all currently running processes
     # @return [Enumerator] each enumerator for all Process objects
     def self.each (&block)
-      all.each_value(&block)
+      all.each(&block)
     end
 
     # Returns the process object having the given PID
     # @param [Fixnum] the PID of the process to be inspected
-    # @return [GenericProcess] the process object for the given PID
+    # @return [Process] the process object for the given PID
     def self.by_pid (pid)
-      all[pid]
+      sys_process_to_process Sys::ProcTable.ps(pid)
     end
 
     # Returns the current process object
     # @return [GenericProcess] the process object for the current process
     def self.current
       by_pid(::Process.pid)
+    end
+
+    private
+
+    # Returns the updated information for the process
+    # @return [Struct::ProcTableStruct] current process structure
+    def update
+      Sys::ProcTable.ps(@pid)
     end
   end
 end

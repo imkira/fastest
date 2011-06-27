@@ -63,6 +63,18 @@ module Fastest
         ruby_path = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
         subject.path.should == File.expand_path(ruby_path)
       end
+
+      it 'should have the current working directory' do
+        subject.working_dir.should == Dir.getwd
+      end
+
+      it 'should detect changes to the working directory' do
+        basedir = File.dirname(Dir.getwd)
+        cur_proc = subject
+        Dir.chdir basedir do
+          cur_proc.working_dir.should == basedir
+        end
+      end
     end
 
     describe '.all' do
@@ -70,9 +82,9 @@ module Fastest
         Process.all
       end
 
-      it 'should return a hash of processes' do
-        should be_kind_of Hash
-        subject.each do |pid, process|
+      it 'should return an array of processes' do
+        should be_kind_of Array
+        subject.each do |process|
           process.should be_kind_of Process
         end
       end
@@ -81,15 +93,10 @@ module Fastest
         should_not be_empty
       end
 
-      it 'should index processes by their corresponding PID' do
-        subject.each do |pid, process|
-          pid.should == process.pid
-        end
-      end
-
       it 'should contain the current process' do
-        subject[::Process.pid].should_not be_nil
-        subject[::Process.pid].should == Process.current
+        subject.select do |process|
+          process == Process.current
+        end.size.should == 1
       end
     end
 
