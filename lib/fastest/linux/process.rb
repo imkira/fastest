@@ -5,6 +5,7 @@ module Fastest
       # Returns the current process object
       # @return [GenericProcess] the process object for the current process
       def self.current
+        # this is faster than just indexing #all by the current PID
         sys_process_to_process Sys::ProcTable.ps(::Process.pid)
       end
 
