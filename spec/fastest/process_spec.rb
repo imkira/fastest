@@ -2,11 +2,37 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module Fastest
   describe GenericProcess do
-    describe '#<=>' do
-      before(:each) do
-        @now = Time.now
+    before(:each) do
+      @now = Time.now
+      @all_hashes = {
+        :init => Process.new(1, @now - 100, 0, 'init', '/sbin/init', '/sbin/init'),
+        :kthreadd => Process.new(2, @now - 100, 0, 'kthreadd', nil, 'kthreadd'),
+        :sshd => Process.new(623, @now - 80, 1, 'sshd', nil, '/usr/sbin/sshd -D'),
+        :bash => Process.new(1150, @now - 50, 1, 'bash', '/bin/bash', 'bash'),
+        :chrome => Process.new(2140, @now - 40, 1150, 'chrome', '/opt/google/chrome/chrome', '/opt/google/chrome/chrome'),
+        :ruby => Process.new(3410, @now - 30, 1150, 'ruby', '/usr/bin/ruby', '/usr/bin/ruby my_script param1'),
+        :orphan => Process.new(3110, @now - 51, 1150, 'orphan', '/usr/bin/orphan', 'orphan of 1150 (not bash)')
+      }
+      @all = @all_hashes.values.shuffle!
+      # stub the process table
+      Sys::ProcTable.stub(:ps) do |pid|
+        unless pid.nil?
+          @all.detect do |process|
+            process.pid == pid
+          end
+        else
+          @all
+        end
       end
+      Process.stub(:sys_process_to_process) do |process|
+        process
+      end
+      # return ruby as the current process
+      ::Process.stub(:pid).and_return(3410)
+      ::Process.stub(:ppid).and_return(1150)
+    end
 
+    describe '#<=>' do
       it 'should only sort by PID and creation time' do
         process1 = Process.new(10, @now, 1, 'ls', '/bin/ls', '/dir')
         process2 = Process.new(10, @now, 2, 'cat', '/bin/cat', '/file')
@@ -36,50 +62,30 @@ module Fastest
       end
     end
 
-    describe '.by_pid' do
-      it 'should return the process for the current PID' do
-        Process.by_pid(::Process.pid).pid.should == ::Process.pid
+    describe '#parent' do
+      it 'should return the parent if it still exists' do
+        @all_hashes[:sshd].parent.should == @all_hashes[:init]
+        @all_hashes[:bash].parent.should == @all_hashes[:init]
+        @all_hashes[:chrome].parent.should == @all_hashes[:bash]
+        @all_hashes[:ruby].parent.should == @all_hashes[:bash]
       end
 
-      it 'should return the process for the parent PID' do
-        Process.by_pid(::Process.pid).ppid.should == ::Process.ppid
+      it 'should return nil if the parent does not exist' do
+        @all_hashes[:init].parent.should be_nil
+        @all_hashes[:kthreadd].parent.should be_nil
+      end
+
+      it 'should return nil for orphan objects whose parent ID is being reused' do
+        @all_hashes[:orphan].parent.should be_nil
       end
     end
 
-    describe '.current' do
-      subject do
-        Process.current
-      end
-
-      it 'should have the current PID' do
-        subject.pid.should == ::Process.pid
-      end
-
-      it 'should have the parent PID' do
-        subject.ppid.should == ::Process.ppid
-      end
-
-      it 'should have the name set to ruby' do
-        ruby_name = Config::CONFIG['ruby_install_name']
-        subject.name.should == ruby_name
-      end
-
-      it 'should have the full path set to ruby' do
-        ruby_path = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
-        subject.path.should == File.expand_path(ruby_path)
-      end
-
-      it 'should have the current working directory' do
-        subject.working_dir.should == Dir.getwd
-      end
-
-      it 'should detect changes to the working directory' do
-        basedir = File.dirname(Dir.getwd)
-        cur_proc = subject
-        Dir.chdir basedir do
-          cur_proc.working_dir.should == basedir
-        end
-      end
+    it 'should behave like an enumerable' do
+      Process.should respond_to :any?
+      Process.should respond_to :include?
+      Process.should respond_to :inject
+      Process.should respond_to :map
+      Process.should respond_to :select
     end
 
     describe '.all' do
@@ -94,44 +100,50 @@ module Fastest
         end
       end
 
-      it 'should be non-empty' do
-        should_not be_empty
+      it 'should consist of all running processes' do
+        should == @all
       end
-
-      it 'should contain the current process' do
-        subject.select do |process|
-          process == Process.current
-        end.size.should == 1
-      end
-    end
-
-    it 'should behave like an enumerable' do
-      Process.should respond_to :any?
-      Process.should respond_to :include?
-      Process.should respond_to :inject
-      Process.should respond_to :map
-      Process.should respond_to :select
     end
 
     describe '.each' do
-      it 'should be an enumerator' do
-        Process.each.should be_kind_of Enumerator
+      subject do
+        Process.each
       end
 
-      it 'should be non-empty' do
-        Process.each.should be_any
+      it 'should be an enumerator' do
+        subject.should be_kind_of Enumerator
       end
 
       it 'should contain processes' do
-        Process.each do |process|
+        subject do |process|
           process.should be_kind_of Process
         end
       end
 
-      it 'should contain the current process' do
-        Process.each.any? do |process|
-          process.pid == ::Process.pid
-        end.should == true
+      it 'should consist of all running processes' do
+        subject.map.sort.should == @all.sort
+      end
+    end
+
+    describe '.by_pid' do
+      it 'should return the process for the given PID' do
+        @all.each do |process|
+          Process.by_pid(process.pid).should == process
+        end
+      end
+
+      it 'should return nil for a non-existent PID' do
+        Process.by_pid(9999).should be_nil
+      end
+    end
+
+    describe '.current' do
+      subject do
+        Process.current
+      end
+
+      it 'should be ruby' do
+        should == @all_hashes[:ruby]
       end
     end
   end
