@@ -13,7 +13,8 @@ module Fastest
           # create process object
           pid = pid.to_i
           path = read_proc_path(pid)
-          procs[pid] = Process.new(pid, nil, nil, path)
+          cmd_line = read_proc_cmd_line(pid)
+          procs[pid] = Process.new(pid, nil, nil, path, cmd_line)
           procs
         end
       end
@@ -39,6 +40,15 @@ module Fastest
           end
         rescue
         end
+      end
+
+      # Read the command line the process was invoqued with
+      # @param [Fixnum] the pid number of the process to inspect
+      # @note This method may return nil if you don't have permission to read the command line
+      # @return [String, nil] the full path to the process or nil (e.g., permission denied)
+      def self.read_proc_cmd_line (pid)
+        cmdline_path = File.join(path_to_proc_dir(pid), 'cmdline')
+        File.read(cmdline_path)
       end
     end
   end

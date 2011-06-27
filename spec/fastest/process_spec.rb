@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module Fastest
-  describe Process do
+  describe GenericProcess do
     describe '.current' do
       subject do
         Process.current

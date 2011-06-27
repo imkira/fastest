@@ -19,12 +19,11 @@ module Fastest
     # @return [String] the command line passed to the process
     attr_reader :cmd_line
 
-    def initialize (pid, created_at, ppid = nil, path = nil, name = nil, cmd_line = nil)
+    def initialize (pid, created_at, ppid = nil, path = nil, cmd_line = nil)
       @pid = pid
       @created_at = created_at
       @ppid = ppid
       @path = path
-      @name = name
       @cmd_line = cmd_line
     end
 
