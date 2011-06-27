@@ -3,6 +3,7 @@ module Fastest
   # @abstract
   class GenericProcess
     include Comparable
+    include Enumerable
 
     # @return [Fixnum] the process id
     attr_reader :pid
