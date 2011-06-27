@@ -2,6 +2,40 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module Fastest
   describe GenericProcess do
+    describe '#<=>' do
+      before(:each) do
+        @now = Time.now
+      end
+
+      it 'should only sort by PID and creation time' do
+        process1 = Process.new(10, @now, 1, '/bin/ls', '/dir')
+        process2 = Process.new(10, @now, 2, '/bin/cat', '/file')
+        process1.should == process2
+        process2.should == process1
+      end
+
+      it 'should sort by PID (in ascending order)' do
+        process1 = Process.new(10, @now)
+        process2 = Process.new(11, @now)
+        process1.should < process2
+        process2.should > process1
+      end
+
+      it 'should sort by creation time (in ascending order)' do
+        process1 = Process.new(10, @now + 10)
+        process2 = Process.new(10, @now)
+        process1.should > process2
+        process2.should < process1
+      end
+
+      it 'should first sort by PID' do
+        process1 = Process.new(10, @now + 10)
+        process2 = Process.new(11, @now)
+        process1.should < process2
+        process2.should > process1
+      end
+    end
+
     describe '.current' do
       subject do
         Process.current
