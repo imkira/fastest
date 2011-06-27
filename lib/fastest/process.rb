@@ -40,16 +40,23 @@ module Fastest
       end
     end
 
-    # Returns the current process object
-    # @return [GenericProcess] the process object for the current process
-    def self.current
-      all[::Process.pid]
-    end
-
     # Iterate over all currently running processes
     # @return [Enumerator] each enumerator for all Process objects
     def self.each (&block)
       all.each_value(&block)
+    end
+
+    # Returns the process object having the given PID
+    # @param [Fixnum] the PID of the process to be inspected
+    # @return [GenericProcess] the process object for the given PID
+    def self.by_pid (pid)
+      all[pid]
+    end
+
+    # Returns the current process object
+    # @return [GenericProcess] the process object for the current process
+    def self.current
+      by_pid(::Process.pid)
     end
   end
 end

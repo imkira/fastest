@@ -36,6 +36,16 @@ module Fastest
       end
     end
 
+    describe '.by_pid' do
+      it 'should return the process for the current PID' do
+        Process.by_pid(::Process.pid).pid.should == ::Process.pid
+      end
+
+      it 'should return the process for the parent PID' do
+        Process.by_pid(::Process.pid).ppid.should == ::Process.ppid
+      end
+    end
+
     describe '.current' do
       subject do
         Process.current

@@ -2,11 +2,12 @@ module Fastest
   module Linux 
     # Process class for the Linux platform (see {GenericProcess})
     class Process < Fastest::Unix::Process
-      # Returns the current process object
-      # @return [GenericProcess] the process object for the current process
-      def self.current
-        # this is faster than just indexing #all by the current PID
-        sys_process_to_process Sys::ProcTable.ps(::Process.pid)
+      # Returns the process object having the given PID
+      # @param [Fixnum] the PID of the process to be inspected
+      # @return [Process] the process object for the given PID
+      def self.by_pid (pid)
+        # this is faster than Generic.by_pid
+        sys_process_to_process Sys::ProcTable.ps(pid)
       end
 
       # Return all currently executing processes
