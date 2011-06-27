@@ -45,6 +45,14 @@ module Fastest
       end
     end
 
+    it 'should behave like an enumerable' do
+      Process.should respond_to :any?
+      Process.should respond_to :include?
+      Process.should respond_to :inject
+      Process.should respond_to :map
+      Process.should respond_to :select
+    end
+
     describe '.each' do
       it 'should be an enumerator' do
         Process.each.should be_kind_of Enumerator
