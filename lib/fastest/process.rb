@@ -44,6 +44,19 @@ module Fastest
       end
     end
 
+    # Returns parent process object
+    # @return [GenericProcess] the parent process object
+    def parent
+      @pprocess ||=
+        unless @pid.nil?
+          pprocess = Process.by_pid(@ppid)
+          # parent must exist and must have been created before this one
+          unless pprocess.nil? or pprocess.created_at > @created_at
+            pprocess
+          end
+        end
+    end
+
     # Returns the current working directory for the process
     # @return [String] the current working directory
     def working_dir
@@ -68,7 +81,7 @@ module Fastest
 
     # Returns the process object having the given PID
     # @param [Fixnum] the PID of the process to be inspected
-    # @return [Process] the process object for the given PID
+    # @return [GenericProcess] the process object for the given PID
     def self.by_pid (pid)
       sys_process_to_process Sys::ProcTable.ps(pid)
     end
