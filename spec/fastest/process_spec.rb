@@ -45,6 +45,10 @@ module Fastest
         subject.pid.should == ::Process.pid
       end
 
+      it 'should have the parent PID' do
+        subject.ppid.should == ::Process.ppid
+      end
+
       it 'should contain the full path to ruby' do
         ruby_path = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
         subject.path.should == File.expand_path(ruby_path)
