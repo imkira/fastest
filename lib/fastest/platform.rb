@@ -59,5 +59,13 @@ module Fastest
     def windows?
       kind_of? Windows::Platform rescue false
     end
+
+    # Returns the time the system was last booted
+    # @return [Time] the time the system was last booted
+    def system_boot_time
+      # time may vary slightly (usually by 1s difference) from call to call
+      # so we memoize the value so it does not appear to vary
+      @system_boot_time ||= (Sys::Uptime.boot_time).freeze
+    end
   end
 end

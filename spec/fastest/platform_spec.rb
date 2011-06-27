@@ -6,8 +6,8 @@ module Fastest
       Platform
     end
 
-    describe "#bsd?" do
-      it "should return true on BSD flavors or false otherwise" do
+    describe '#bsd?' do
+      it 'should return true on BSD flavors or false otherwise' do
         if RUBY_PLATFORM =~ /freebsd|openbsd|netbsd/i
           should be_bsd
         else
@@ -16,8 +16,8 @@ module Fastest
       end
     end
 
-    describe "#unix?" do
-      it "should return true on Linux and BSD flavors or false otherwise" do
+    describe '#unix?' do
+      it 'should return true on Linux and BSD flavors or false otherwise' do
         if RUBY_PLATFORM =~ /linux|freebsd|openbsd|netbsd/i
           should be_unix
         else
@@ -26,8 +26,8 @@ module Fastest
       end
     end
 
-    describe "#linux?" do
-      it "should return true on Linux or false otherwise" do
+    describe '#linux?' do
+      it 'should return true on Linux or false otherwise' do
         if RUBY_PLATFORM =~ /linux/i
           should be_linux
         else
@@ -36,8 +36,8 @@ module Fastest
       end
     end
 
-    describe "#mac?" do
-      it "should return true on MacOS or false otherwise" do
+    describe '#mac?' do
+      it 'should return true on MacOS or false otherwise' do
         if RUBY_PLATFORM =~ /darwin/i
           should be_mac
         else
@@ -46,8 +46,8 @@ module Fastest
       end
     end
 
-    describe "#windows?" do
-      it "should return true on Windows or false otherwise" do
+    describe '#windows?' do
+      it 'should return true on Windows or false otherwise' do
         if RUBY_PLATFORM =~ /mswin/i
           should be_windows
         else
@@ -56,14 +56,24 @@ module Fastest
       end
     end
 
-    describe "#default_browser" do
-      it "returns a known browser" do
+    describe '#system_boot_time' do
+      it 'should be a time object' do
+        subject.system_boot_time.should be_kind_of Time
+      end
+
+      it 'should represent a time in the past' do
+        subject.system_boot_time.should < Time.now
+      end
+    end
+
+    describe '#default_browser' do
+      it 'returns a known browser' do
         subject.default_browser.should match /iexplore|firefox|chrome|safari|konqueror|opera/i
       end
     end
 
-    describe "#default_text_editor" do
-      it "returns a known text editor" do
+    describe '#default_text_editor' do
+      it 'returns a known text editor' do
         subject.default_text_editor.should match /notepad|vim|gedit|textedit/i
       end
     end
