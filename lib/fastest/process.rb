@@ -28,18 +28,6 @@ module Fastest
       @cmd_line = cmd_line
     end
 
-    # Returns the current process object
-    # @return [GenericProcess] the process object for the current process
-    def self.current
-      all[::Process.pid]
-    end
-
-    # Iterate over all currently running processes
-    # @return [Enumerator] each enumerator for all Process objects
-    def self.each (&block)
-      all.each_value(&block)
-    end
-
     # Compares receiver process against another
     # @param [GenericProcess] target process to compare against
     # @return [-1, 0, 1] implementation of Comparable's <=>
@@ -50,6 +38,18 @@ module Fastest
       else
         created_at <=> process2.created_at
       end
+    end
+
+    # Returns the current process object
+    # @return [GenericProcess] the process object for the current process
+    def self.current
+      all[::Process.pid]
+    end
+
+    # Iterate over all currently running processes
+    # @return [Enumerator] each enumerator for all Process objects
+    def self.each (&block)
+      all.each_value(&block)
     end
   end
 end
