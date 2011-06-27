@@ -1,5 +1,8 @@
 source "http://rubygems.org"
 
+# ruby ffi
+gem 'ffi'
+
 # cross-platform process information listing gem
 gem 'sys-proctable', :require => 'sys/proctable'
 
