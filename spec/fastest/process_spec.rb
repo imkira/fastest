@@ -17,7 +17,7 @@ module Fastest
       # stub the process table
       Sys::ProcTable.stub(:ps) do |pid|
         unless pid.nil?
-          @all.detect do |process|
+          @all.find do |process|
             process.pid == pid
           end
         else
@@ -25,7 +25,7 @@ module Fastest
         end
       end
       Process.stub(:sys_process_to_process) do |process|
-        process
+        Process.new(process.pid, process.created_at, process.ppid, process.name, process.path, process.cmd_line)
       end
       # return ruby as the current process
       ::Process.stub(:pid).and_return(3410)
@@ -78,6 +78,14 @@ module Fastest
       it 'should return nil for orphan objects whose parent ID is being reused' do
         @all_hashes[:orphan].parent.should be_nil
       end
+
+      it 'should cache the parent process (even if nil)' do
+        Process.should_receive(:by_pid).with(@all_hashes[:orphan].ppid).exactly(1).times
+        @all_hashes[:orphan].parent.should be_nil
+        Process.rspec_verify
+        Process.should_not_receive(:by_pid)
+        @all_hashes[:orphan].parent.should be_nil
+      end
     end
 
     it 'should behave like an enumerable' do
@@ -102,6 +110,13 @@ module Fastest
 
       it 'should consist of all running processes' do
         should == @all
+      end
+
+      it 'should cache all parents' do
+        Process.should_not_receive(:by_pid)
+        subject.each do |process|
+          process.parent
+        end
       end
     end
 
@@ -134,6 +149,10 @@ module Fastest
 
       it 'should return nil for a non-existent PID' do
         Process.by_pid(9999).should be_nil
+      end
+
+      it 'should return nil if passed pid is nil' do
+        Process.by_pid(nil).should be_nil
       end
     end
 
