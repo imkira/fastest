@@ -1,8 +1,35 @@
 = fastest
 
-Description goes here.
+fastest is a GUI testing framework.
 
-== Contributing to fastest
+== Features
+
+Not yet.
+
+== Known Problems
+
+Abundant.
+
+== Synopsis
+
+FIX (code sample of usage)
+
+== Requirements
+
+* Time
+* Money
+
+== Install
+
+Not recommended.
+
+== Developers
+
+After checking out the source, run:
+
+  $ away
+
+== Contributing
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -14,6 +41,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2011 Mario Freitas. See LICENSE.txt for
-further details.
-
+See LICENSE.txt for further details.
