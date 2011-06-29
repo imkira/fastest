@@ -63,6 +63,24 @@ module Fastest
       end
     end
 
+    # Checks whether process is still running
+    # @return [true, false] true if process is still running, false otherwise
+    def running?
+      state[:running] == true
+    end
+
+    # Checks whether parent is still running
+    # @return [true, false] true if parent is still running, false otherwise
+    def orphan?
+      process = parent
+      if process.nil?
+        # no parent object (not running)
+        true
+      else
+        not process.running?
+      end
+    end
+
     # Return all currently executing processes
     # @return [Array] array of currently running processes
     def self.all
@@ -104,6 +122,14 @@ module Fastest
       by_pid(::Process.pid)
     end
 
+    protected
+
+    # Returns the updated information for the process
+    # @return [Struct::ProcTableStruct] current process structure
+    def update
+      Sys::ProcTable.ps(@pid)
+    end
+
     private
 
     # Returns passed parent if it is valid, or nil if this process is orphan
@@ -115,12 +141,6 @@ module Fastest
       unless parent.nil? or parent.pid != process.ppid or parent.created_at > process.created_at
         parent 
       end
-    end
-
-    # Returns the updated information for the process
-    # @return [Struct::ProcTableStruct] current process structure
-    def update
-      Sys::ProcTable.ps(@pid)
     end
   end
 end
