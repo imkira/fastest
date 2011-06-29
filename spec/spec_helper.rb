@@ -12,6 +12,8 @@ Dir['support/**/*.rb'].each do |f|
   require f
 end
 
+Factory.find_definitions
+
 RSpec.configure do |config|
   
 end
